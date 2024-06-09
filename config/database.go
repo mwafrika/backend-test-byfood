@@ -29,7 +29,9 @@ func MigrateDatabase() {
         id SERIAL PRIMARY KEY,
         title TEXT NOT NULL,
         author TEXT NOT NULL,
-        year INT NOT NULL
+        year INT NOT NULL,
+		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
     );`
 	_, err := DB.Exec(createTableQuery)
 	if err != nil {
