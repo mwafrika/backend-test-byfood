@@ -22,3 +22,18 @@ func ConnectDatabase() {
 	}
 	log.Println("Database connected")
 }
+
+func MigrateDatabase() {
+	createTableQuery := `
+    CREATE TABLE IF NOT EXISTS books (
+        id SERIAL PRIMARY KEY,
+        title TEXT NOT NULL,
+        author TEXT NOT NULL,
+        year INT NOT NULL
+    );`
+	_, err := DB.Exec(createTableQuery)
+	if err != nil {
+		log.Fatal("Failed to migrate database:", err)
+	}
+	log.Println("Database migrated")
+}
