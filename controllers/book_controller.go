@@ -99,3 +99,22 @@ func AddBook(c *gin.Context) {
 	}
 	c.JSON(http.StatusCreated, gin.H{"message": "Book created successfully", "data": book})
 }
+
+func GetBookByID(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		config.Log.WithError(err).Error("Invalid ID")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
+	}
+
+	var book models.Book
+	query := "SELECT id, title, author, year FROM books WHERE id = $1"
+	err = config.DB.QueryRow(query, id).Scan(&book.ID, &book.Title, &book.Author, &book.Year)
+	if err != nil {
+		config.Log.WithError(err).Error("Book not found")
+		c.JSON(http.StatusNotFound, gin.H{"error": "Book not found"})
+		return
+	}
+	c.JSON(http.StatusOK, book)
+}
