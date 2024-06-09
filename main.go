@@ -17,7 +17,7 @@ func init() {
 func main() {
 	router := gin.Default()
 
-	router.GET("/", controllers.Welcome)
+	router.GET("/books", controllers.GetBooks)
 
 	router.Run()
 }
