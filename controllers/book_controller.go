@@ -27,41 +27,25 @@ func GetBooks(c *gin.Context) {
 
 	offset := (page - 1) * pageSize
 
-	rows, err := config.DB.Query("SELECT * FROM books ORDER BY year DESC LIMIT $1 OFFSET $2", pageSize, offset)
-	if err != nil {
+	var books []models.Book
+
+	if err := config.DB.Order("year DESC").Limit(pageSize).Offset(offset).Find(&books).Error; err != nil {
 		config.Log.WithError(err).Error("Error fetching books")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error fetching books"})
 		return
 	}
-	defer rows.Close()
 
-	var books []models.Book
-	for rows.Next() {
-		var book models.Book
-		if err := rows.Scan(&book.ID, &book.Title, &book.Author, &book.Year, &book.CreatedAt, &book.UpdatedAt); err != nil {
-			config.Log.WithError(err).Error("Error scanning book")
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error scanning book"})
-			return
-		}
-		books = append(books, book)
-	}
-
-	var total int
-	err = config.DB.QueryRow("SELECT COUNT(*) FROM books").Scan(&total)
-	if err != nil {
+	var total int64
+	if err := config.DB.Model(&models.Book{}).Count(&total).Error; err != nil {
 		config.Log.WithError(err).Error("Error counting books")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error counting books"})
 		return
 	}
 
-	paginationInfo := struct {
-		Limit      int `json:"limit"`
-		Page       int `json:"page"`
-		TotalCount int `json:"total_count"`
-	}{
-		Limit:      pageSize,
-		Page:       page,
-		TotalCount: total,
+	paginationInfo := gin.H{
+		"limit":       pageSize,
+		"page":        page,
+		"total_count": total,
 	}
 
 	c.JSON(http.StatusOK, gin.H{"data": books, "pagination": paginationInfo})

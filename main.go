@@ -10,8 +10,8 @@ import (
 func init() {
 	config.LoadEnvVariables()
 	config.InitLogger()
-	config.ConnectDatabase()
-	config.MigrateDatabase()
+	config.ConnectToDB()
+	config.MigrateDatabase(config.DB)
 }
 
 func main() {

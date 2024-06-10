@@ -1,41 +1,26 @@
 package config
 
 import (
-	"database/sql"
+	"byfood-test/models"
 	"log"
 	"os"
 
-	_ "github.com/lib/pq"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
-var DB *sql.DB
+var DB *gorm.DB
 
-func ConnectDatabase() {
+func ConnectToDB() {
 	var err error
-	connStr := os.Getenv("DB_URL")
-	DB, err = sql.Open("postgres", connStr)
+	dsn := os.Getenv("DB_URL")
+	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+
 	if err != nil {
-		log.Fatal("Failed to connect to database:", err)
+		log.Fatal("Failed to connect to database", err)
 	}
-	if err = DB.Ping(); err != nil {
-		log.Fatal("Failed to ping database:", err)
-	}
-	log.Println("Database connected")
 }
 
-func MigrateDatabase() {
-	createTableQuery := `
-    CREATE TABLE IF NOT EXISTS books (
-        id SERIAL PRIMARY KEY,
-        title TEXT NOT NULL,
-        author TEXT NOT NULL,
-        year INT NOT NULL,
-		created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-    );`
-	_, err := DB.Exec(createTableQuery)
-	if err != nil {
-		log.Fatal("Failed to migrate database:", err)
-	}
-	log.Println("Database migrated")
+func MigrateDatabase(db *gorm.DB) {
+	db.AutoMigrate(&models.Book{})
 }
