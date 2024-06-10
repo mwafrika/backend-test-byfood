@@ -118,3 +118,28 @@ func GetBookByID(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, book)
 }
+
+func UpdateBookByID(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		config.Log.WithError(err).Error("Invalid ID")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
+	}
+
+	var book models.Book
+	if err := c.ShouldBindJSON(&book); err != nil {
+		config.Log.WithError(err).Error("Invalid input")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+		return
+	}
+
+	query := "UPDATE books SET title = $1, author = $2, year = $3 WHERE id = $4"
+	_, err = config.DB.Exec(query, book.Title, book.Author, book.Year, id)
+	if err != nil {
+		config.Log.WithError(err).Error("Error updating book")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error updating book"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Book successfully updated", "data": book})
+}
