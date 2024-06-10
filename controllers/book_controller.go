@@ -149,3 +149,32 @@ func UpdateBookByID(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Book successfully updated", "data": book})
 }
+
+func DeleteBookByID(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		config.Log.WithError(err).Error("Invalid ID")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		return
+	}
+
+	var book models.Book
+	if err := config.DB.First(&book, id).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			config.Log.WithError(err).Error("Book not found")
+			c.JSON(http.StatusNotFound, gin.H{"error": "Book not found"})
+		} else {
+			config.Log.WithError(err).Error("Error fetching book")
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error fetching book"})
+		}
+		return
+	}
+
+	if err := config.DB.Delete(&book).Error; err != nil {
+		config.Log.WithError(err).Error("Error deleting book")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error deleting book"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Book successfully deleted"})
+}
