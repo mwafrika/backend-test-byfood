@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 func GetBooks(c *gin.Context) {
@@ -74,9 +75,7 @@ func AddBook(c *gin.Context) {
 		return
 	}
 
-	query := "INSERT INTO books (title, author, year) VALUES ($1, $2, $3) RETURNING id"
-	err := config.DB.QueryRow(query, book.Title, book.Author, book.Year).Scan(&book.ID)
-	if err != nil {
+	if err := config.DB.Create(&book).Error; err != nil {
 		config.Log.WithError(err).Error("Error adding book")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error adding book"})
 		return
@@ -93,11 +92,14 @@ func GetBookByID(c *gin.Context) {
 	}
 
 	var book models.Book
-	query := "SELECT id, title, author, year FROM books WHERE id = $1"
-	err = config.DB.QueryRow(query, id).Scan(&book.ID, &book.Title, &book.Author, &book.Year)
-	if err != nil {
-		config.Log.WithError(err).Error("Book not found")
-		c.JSON(http.StatusNotFound, gin.H{"error": "Book not found"})
+	if err := config.DB.First(&book, id).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			config.Log.WithError(err).Error("Book not found")
+			c.JSON(http.StatusNotFound, gin.H{"error": "Book not found"})
+		} else {
+			config.Log.WithError(err).Error("Error fetching book")
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error fetching book"})
+		}
 		return
 	}
 	c.JSON(http.StatusOK, book)
@@ -118,9 +120,29 @@ func UpdateBookByID(c *gin.Context) {
 		return
 	}
 
-	query := "UPDATE books SET title = $1, author = $2, year = $3 WHERE id = $4"
-	_, err = config.DB.Exec(query, book.Title, book.Author, book.Year, id)
-	if err != nil {
+	var existingBook models.Book
+	if err := config.DB.First(&existingBook, id).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			config.Log.WithError(err).Error("Book not found")
+			c.JSON(http.StatusNotFound, gin.H{"error": "Book not found"})
+		} else {
+			config.Log.WithError(err).Error("Error fetching book")
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error fetching book"})
+		}
+		return
+	}
+
+	if book.Title != "" {
+		existingBook.Title = book.Title
+	}
+	if book.Author != "" {
+		existingBook.Author = book.Author
+	}
+	if book.Year != 0 {
+		existingBook.Year = book.Year
+	}
+
+	if err := config.DB.Save(&existingBook).Error; err != nil {
 		config.Log.WithError(err).Error("Error updating book")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error updating book"})
 		return

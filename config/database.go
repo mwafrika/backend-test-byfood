@@ -22,5 +22,10 @@ func ConnectToDB() {
 }
 
 func MigrateDatabase(db *gorm.DB) {
-	db.AutoMigrate(&models.Book{})
+
+	err := db.AutoMigrate(&models.Book{}).Error
+	if err != nil {
+		log.Fatalf("Failed to migrate database: %v", err)
+	}
+	log.Println("Database migrated successfully")
 }
