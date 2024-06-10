@@ -11,7 +11,7 @@ func init() {
 	config.LoadEnvVariables()
 	config.InitLogger()
 	config.ConnectToDB()
-	config.MigrateDatabase(config.DB)
+	config.MigrateDatabase()
 }
 
 func main() {
