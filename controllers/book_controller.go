@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"byfood-test/config"
-	"byfood-test/models"
-	"byfood-test/services"
+	"byfood-test-backend/config"
+	"byfood-test-backend/models"
+	"byfood-test-backend/services"
 	"net/http"
 	"strconv"
 

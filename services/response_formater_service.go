@@ -1,6 +1,6 @@
 package services
 
-import "byfood-test/models"
+import "byfood-test-backend/models"
 
 type ErrorResponse struct {
 	Error string `json:"error"`

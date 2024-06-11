@@ -1,4 +1,4 @@
-module byfood-test
+module byfood-test-backend
 
 go 1.22.4
 

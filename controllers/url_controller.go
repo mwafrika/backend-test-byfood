@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"byfood-test/config"
-	"byfood-test/services"
+	"byfood-test-backend/config"
+	"byfood-test-backend/services"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

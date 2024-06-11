@@ -1,10 +1,10 @@
 package main
 
 import (
-	"byfood-test/config"
-	"byfood-test/controllers"
+	"byfood-test-backend/config"
+	"byfood-test-backend/controllers"
 
-	"byfood-test/docs"
+	"byfood-test-backend/docs"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"

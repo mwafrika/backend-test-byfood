@@ -1,7 +1,7 @@
 package config
 
 import (
-	"byfood-test/models"
+	"byfood-test-backend/models"
 	"log"
 	"os"
 
