@@ -1,7 +1,7 @@
 package tests
 
 import (
-	"byfood-test/controllers"
+	"byfood-test-backend/controllers"
 	"bytes"
 	"encoding/json"
 	"net/http"

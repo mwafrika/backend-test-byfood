@@ -1,9 +1,9 @@
 package tests
 
 import (
-	"byfood-test/config"
-	"byfood-test/controllers"
-	"byfood-test/models"
+	"byfood-test-backend/config"
+	"byfood-test-backend/controllers"
+	"byfood-test-backend/models"
 	"bytes"
 	"encoding/json"
 	"net/http"
