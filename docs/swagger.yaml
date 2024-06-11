@@ -1,0 +1,258 @@
+definitions:
+  controllers.URLRequest:
+    properties:
+      operation:
+        type: string
+      url:
+        type: string
+    required:
+    - operation
+    - url
+    type: object
+  models.Book:
+    properties:
+      author:
+        example: F. Scott Fitzgerald
+        type: string
+      created_at:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      deleted_at:
+        example: "2023-01-03T00:00:00Z"
+        type: string
+      id:
+        example: 1
+        type: integer
+      title:
+        example: The Great Gatsby
+        type: string
+      updated_at:
+        example: "2023-01-02T00:00:00Z"
+        type: string
+      year:
+        example: 1925
+        type: integer
+    type: object
+  services.BookListResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Book'
+        type: array
+      pagination:
+        $ref: '#/definitions/services.Pagination'
+    type: object
+  services.BookResponse:
+    properties:
+      data:
+        $ref: '#/definitions/models.Book'
+      message:
+        type: string
+    type: object
+  services.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  services.Pagination:
+    properties:
+      limit:
+        type: integer
+      page:
+        type: integer
+      total_count:
+        type: integer
+    type: object
+  services.SuccessMessage:
+    properties:
+      message:
+        type: string
+    type: object
+  services.SuccessProcessURL:
+    properties:
+      processed_url:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /books:
+    get:
+      description: Get details of all books with pagination, ordered by year in descending
+        order
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of items per page
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.BookListResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/services.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/services.ErrorResponse'
+      summary: Get all books with pagination and ordering
+      tags:
+      - Books
+    post:
+      consumes:
+      - application/json
+      description: Add a new book to the database
+      parameters:
+      - description: Book to add
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/models.Book'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/services.BookResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/services.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/services.ErrorResponse'
+      summary: Add a new book
+      tags:
+      - Books
+  /books/{id}:
+    delete:
+      description: Delete a specific book by its ID
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.SuccessMessage'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/services.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/services.ErrorResponse'
+      summary: Delete a book by ID
+      tags:
+      - Books
+    get:
+      description: Get details of a specific book by its ID
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Book'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/services.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/services.ErrorResponse'
+      summary: Get a book by ID
+      tags:
+      - Books
+    put:
+      consumes:
+      - application/json
+      description: Update the details of a specific book by its ID
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Book data to update
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/models.Book'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.BookResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/services.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/services.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/services.ErrorResponse'
+      summary: Update a book by ID
+      tags:
+      - Books
+  /process_url:
+    post:
+      consumes:
+      - application/json
+      description: Process a URL for canonicalization or redirection
+      parameters:
+      - description: URL and Operation
+        in: body
+        name: url
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.URLRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.SuccessProcessURL'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/services.ErrorResponse'
+      summary: Process a URL
+      tags:
+      - URL Cleanup
+swagger: "2.0"
