@@ -4,7 +4,6 @@ import (
 	"byfood-test-backend/config"
 	"byfood-test-backend/controllers"
 	"byfood-test-backend/docs"
-	"time"
 
 	"github.com/gin-contrib/cors"
 
@@ -37,7 +36,6 @@ func main() {
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
-		MaxAge:           12 * time.Hour,
 	}
 
 	router.Use(cors.New(config))
