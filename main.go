@@ -4,7 +4,6 @@ import (
 	"byfood-test-backend/config"
 	"byfood-test-backend/controllers"
 	"byfood-test-backend/docs"
-	"time"
 
 	"github.com/gin-contrib/cors"
 
@@ -36,7 +35,7 @@ func main() {
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true
+		AllowCredentials: true,
 	}
 
 	router.Use(cors.New(config))

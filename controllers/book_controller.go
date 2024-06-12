@@ -23,9 +23,9 @@ import (
 // @Failure 500 {object} services.ErrorResponse
 // @Router /books [get]
 func GetBooks(c *gin.Context) {
-
 	pageStr := c.DefaultQuery("page", "1")
 	pageSizeStr := c.DefaultQuery("pageSize", "10")
+	term := c.DefaultQuery("term", "")
 
 	page, err := strconv.Atoi(pageStr)
 	if err != nil || page < 1 {
@@ -42,16 +42,21 @@ func GetBooks(c *gin.Context) {
 
 	var books []models.Book
 
-	if err := config.DB.Order("year DESC").Limit(pageSize).Offset(offset).Find(&books).Error; err != nil {
-		config.Log.WithError(err).Error("Error fetching books")
-		c.JSON(http.StatusInternalServerError, services.ErrorResponse{Error: "Error fetching books"})
-		return
+	query := config.DB.Model(&models.Book{})
+	if term != "" {
+		query = query.Where("title ILIKE ? OR author ILIKE ? OR CAST(year AS TEXT) ILIKE ?", "%"+term+"%", "%"+term+"%", "%"+term+"%")
 	}
 
 	var total int64
-	if err := config.DB.Model(&models.Book{}).Count(&total).Error; err != nil {
+	if err := query.Count(&total).Error; err != nil {
 		config.Log.WithError(err).Error("Error counting books")
 		c.JSON(http.StatusInternalServerError, services.ErrorResponse{Error: "Error counting books"})
+		return
+	}
+
+	if err := query.Order("year DESC").Limit(pageSize).Offset(offset).Find(&books).Error; err != nil {
+		config.Log.WithError(err).Error("Error fetching books")
+		c.JSON(http.StatusInternalServerError, services.ErrorResponse{Error: "Error fetching books"})
 		return
 	}
 
