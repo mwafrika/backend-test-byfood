@@ -76,7 +76,7 @@ definitions:
 info:
   contact: {}
 paths:
-  /books:
+  /api/books:
     get:
       description: Get details of all books with pagination, ordered by year in descending
         order
@@ -138,7 +138,7 @@ paths:
       summary: Add a new book
       tags:
       - Books
-  /books/{id}:
+  /api/books/{id}:
     delete:
       description: Delete a specific book by its ID
       parameters:
@@ -229,7 +229,7 @@ paths:
       summary: Update a book by ID
       tags:
       - Books
-  /process_url:
+  /api/process_url:
     post:
       consumes:
       - application/json

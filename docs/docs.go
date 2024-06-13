@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/books": {
+        "/api/books": {
             "get": {
                 "description": "Get details of all books with pagination, ordered by year in descending order",
                 "produces": [
@@ -107,7 +107,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/books/{id}": {
+        "/api/books/{id}": {
             "get": {
                 "description": "Get details of a specific book by its ID",
                 "produces": [
@@ -244,7 +244,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/process_url": {
+        "/api/process_url": {
             "post": {
                 "description": "Process a URL for canonicalization or redirection",
                 "consumes": [

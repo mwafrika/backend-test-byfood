@@ -1,7 +1,7 @@
-# Book Management System
+# Library Management System
 
 ## Overview
-The Book Management System is a powerful and flexible server application built with Go (Golang) and the Gin framework, designed to efficiently manage books. It provides a RESTful API for performing various book-related operations such as adding, updating, deleting, and retrieving books. Additionally, it offers functionality to process URLs for redirection and canonicalization
+The Library Management System is a powerful and flexible server application built with Go (Golang) and the Gin framework, designed to efficiently manage books. It provides a RESTful API for performing various book-related operations such as adding, updating, deleting, and retrieving books. Additionally, it offers functionality to process URLs for redirection and canonicalization
 
 ## Table of Contents
 - [API Documentation]()
@@ -16,8 +16,9 @@ The Book Management System is a powerful and flexible server application built w
 - [License]()
 
 ## API Documentation
-- Document each endpoint using Swagger to provide an interactive API reference.
-- Swagger documentation can be accessed at `/docs` endpoint when the server is running.
+- [Live swagger Documentation](https://reliable-germana-mwafrika-f5c060f5.koyeb.app/api/docs/index.html#/)
+- Documented each endpoint using Swagger to provide an interactive API reference.
+- Swagger documentation can be accessed at `http://localhost:7000/docs/index.html#/` endpoint when the server is running locally.
 
 ## Features
 - Add, update, delete, and retrieve books.
@@ -92,7 +93,7 @@ The API provides the following endpoints for managing books:
 
 #### 1. Add Book
 - **Method**: POST
-- **Endpoint**: `POST /books`
+- **Endpoint**: `POST /api/books`
 - **Description**: Add a new book to the system.
 - **Request Body**:
  
@@ -117,7 +118,7 @@ The API provides the following endpoints for managing books:
 ```
 #### 1. Update a Book
 - **Method**: PUT
-- **Endpoint**: `PUT /books/:id`
+- **Endpoint**: `PUT /api/books/:id`
 - **Description**: Update an existing book.
 - **Request Body**:
 ```js
@@ -145,7 +146,7 @@ The API provides the following endpoints for managing books:
 
 #### 1. Delete a Book
 - **Method**: DELETE
-- **Endpoint**: `DELETE /books/:id`
+- **Endpoint**: `DELETE /api/books/:id`
 - **Description**: Delete a book.
 - **Request Body**:
 
@@ -157,7 +158,7 @@ The API provides the following endpoints for managing books:
 ```
 #### 1. Retrieve a Book
 - **Method**: GET
-- **Endpoint**: `GET /books/:id`
+- **Endpoint**: `GET /api/books/:id`
 - **Description**: Retrieve a book by its ID.
 - **Request Body**:
 ```js
@@ -175,7 +176,7 @@ The API provides the following endpoints for managing books:
 
 #### 1. List All Books
 - **Method**: GET
-- **Endpoint**: `GET /books`
+- **Endpoint**: `GET /api/books`
 - **Description**: List all books.
 - **Request Body**:
 ```js
@@ -216,7 +217,7 @@ go test ./tests -v
 
 ### Generating Swagger documentation
 run the following command to generate the swagger documentation then visit the documentation on: 
-[http://localhost:7000/docs/index.html#/]()
+[http://localhost:7000/api/docs/index.html#/]()
 
 ```js
 swag init

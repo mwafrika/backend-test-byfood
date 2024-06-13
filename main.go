@@ -22,8 +22,6 @@ func init() {
 func main() {
 	router := gin.Default()
 
-	docs.SwaggerInfo.BasePath = "/"
-
 	docs.SwaggerInfo.Title = "Book Management System API"
 	docs.SwaggerInfo.Description = "This is a server for managing books."
 	docs.SwaggerInfo.Version = "1.0"

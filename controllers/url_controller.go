@@ -22,7 +22,7 @@ type URLRequest struct {
 // @Param url body URLRequest true "URL and Operation"
 // @Success 200 {object} services.SuccessProcessURL
 // @Failure 400 {object} services.ErrorResponse
-// @Router /process_url [post]
+// @Router /api/process_url [post]
 func ProcessURL(c *gin.Context) {
 	var request URLRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
