@@ -17,22 +17,26 @@ func LoadEnvVariables() {
 		env = "development"
 	}
 
-	var envPath string
-	switch env {
-	case "test":
-		projectRoot, err := filepath.Abs("../")
-		if err != nil {
-			log.Fatal("Error determining the project root directory: ", err)
+	if env != "production" {
+		var envPath string
+		switch env {
+		case "test":
+			projectRoot, err := filepath.Abs("../")
+			if err != nil {
+				log.Fatal("Error determining the project root directory: ", err)
+			}
+			envPath = filepath.Join(projectRoot, ".env")
+			log.Println("Project root directory:", projectRoot)
+
+		default:
+			envPath = ".env"
 		}
-		envPath = filepath.Join(projectRoot, ".env")
-		log.Println("Project root directory:", projectRoot)
 
-	default:
-		envPath = ".env"
-	}
-
-	err := godotenv.Load(envPath)
-	if err != nil {
-		log.Fatal("Error loading .env file: ", err)
+		err := godotenv.Load(envPath)
+		if err != nil {
+			log.Fatal("Error loading .env file: ", err)
+		}
+	} else {
+		log.Println("Skipping .env file loading in production")
 	}
 }
