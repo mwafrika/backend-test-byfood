@@ -21,7 +21,7 @@ import (
 // @Success 200 {object} services.BookListResponse
 // @Failure 400 {object} services.ErrorResponse
 // @Failure 500 {object} services.ErrorResponse
-// @Router /books [get]
+// @Router /api/books [get]
 func GetBooks(c *gin.Context) {
 	pageStr := c.DefaultQuery("page", "1")
 	pageSizeStr := c.DefaultQuery("pageSize", "10")
@@ -79,7 +79,7 @@ func GetBooks(c *gin.Context) {
 // @Success 201 {object} services.BookResponse
 // @Failure 400 {object} services.ErrorResponse
 // @Failure 500 {object} services.ErrorResponse
-// @Router /books [post]
+// @Router /api/books [post]
 func AddBook(c *gin.Context) {
 	var book models.Book
 	if err := c.ShouldBindJSON(&book); err != nil {
@@ -120,7 +120,7 @@ func AddBook(c *gin.Context) {
 // @Success 200 {object} models.Book
 // @Failure 400 {object} services.ErrorResponse
 // @Failure 404 {object} services.ErrorResponse
-// @Router /books/{id} [get]
+// @Router /api/books/{id} [get]
 func GetBookByID(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -155,7 +155,7 @@ func GetBookByID(c *gin.Context) {
 // @Failure 400 {object} services.ErrorResponse
 // @Failure 404 {object} services.ErrorResponse
 // @Failure 500 {object} services.ErrorResponse
-// @Router /books/{id} [put]
+// @Router /api/books/{id} [put]
 func UpdateBookByID(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -210,7 +210,7 @@ func UpdateBookByID(c *gin.Context) {
 // @Success 200 {object} services.SuccessMessage
 // @Failure 400 {object} services.ErrorResponse
 // @Failure 404 {object} services.ErrorResponse
-// @Router /books/{id} [delete]
+// @Router /api/books/{id} [delete]
 func DeleteBookByID(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
