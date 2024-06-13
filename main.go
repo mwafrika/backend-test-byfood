@@ -40,12 +40,15 @@ func main() {
 
 	router.Use(cors.New(config))
 
-	router.POST("/books", controllers.AddBook)
-	router.GET("/books", controllers.GetBooks)
-	router.GET("/books/:id", controllers.GetBookByID)
-	router.PUT("/books/:id", controllers.UpdateBookByID)
-	router.DELETE("/books/:id", controllers.DeleteBookByID)
-	router.POST("/process_url", controllers.ProcessURL)
-	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	api := router.Group("/api")
+	{
+		api.POST("/books", controllers.AddBook)
+		api.GET("/books", controllers.GetBooks)
+		api.GET("/books/:id", controllers.GetBookByID)
+		api.PUT("/books/:id", controllers.UpdateBookByID)
+		api.DELETE("/books/:id", controllers.DeleteBookByID)
+		api.POST("/process_url", controllers.ProcessURL)
+		api.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	}
 	router.Run()
 }
