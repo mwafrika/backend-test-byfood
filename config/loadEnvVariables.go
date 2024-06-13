@@ -18,6 +18,7 @@ func LoadEnvVariables() {
 	}
 
 	log.Println(env, "envenvenvenvenvenvenvenvenvenvenvenv")
+
 	if env != "production" {
 		var envPath string
 		switch env {
