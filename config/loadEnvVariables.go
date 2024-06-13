@@ -11,10 +11,8 @@ import (
 func LoadEnvVariables() {
 	env := os.Getenv("APP_ENV")
 
-	log.Println("Environment:", env)
-
 	if env == "" {
-		env = "production"
+		env = "development"
 	}
 
 	if env != "production" {
@@ -36,7 +34,5 @@ func LoadEnvVariables() {
 		if err != nil {
 			log.Fatal("Error loading .env file: ", err)
 		}
-	} else {
-		log.Println("Skipping .env file loading in production")
 	}
 }
